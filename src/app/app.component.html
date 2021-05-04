@@ -1,0 +1,93 @@
+
+<style>
+td,th {border: 1px solid black;}
+
+</style>
+<div>
+
+  <div>
+
+    <button (click)="loadData()">{{ buttonText}}</button>&nbsp;&nbsp;
+    <button (click)="addRow()">Add Records</button>
+  </div>
+  
+<br>
+<br>
+<!-- <div *ngIf="data">{{ data | json }}</div> -->
+
+<table *ngIf="data" style="text-align: center; border: 1px solid black">
+<thead>
+  <tr>
+    <th>User Id</th>
+    <th>First Name</th>
+    <th>Middle Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Role</th>
+    <th>Address</th>
+    <th>Creation Date</th>
+    <th>Modification Date</th>
+    <th>Action</th>
+    <th>Options</th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let row of data; let i = index">
+    <td>
+      <span>{{ row.id }}</span>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.firstName }}</span>
+      <input type="text" [(ngModel)]="row.firstName" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.middleName }}</span>
+      <input type="text" [(ngModel)]="row.middleName" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.lastName }}</span>
+      <input type="text" [(ngModel)]="row.lastName" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.email }}</span>
+      <input type="text" [(ngModel)]="row.email" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.phone }}</span>
+      <input type="text" [(ngModel)]="row.phone" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.role }}</span>
+      <input type="text" [(ngModel)]="row.role" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.address }}</span>
+      <input type="text" [(ngModel)]="row.address" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.createdOn }}</span>
+      <input type="text" [(ngModel)]="row.createdOn" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <span *ngIf= !row.isEditable >{{ row.modifiedOn }}</span>
+      <input type="text" [(ngModel)]="row.modifiedOn" *ngIf= row.isEditable>
+    </td>
+    <td>
+      <button (click)="row.isEditable=!row.isEditable">Edit</button>
+      &nbsp;
+      <button (click)="row.isEditable=false" (click)="deleteRecord(row.id,i)">Delete</button>
+    </td>
+    <td>
+      <button (click)="row.isEditable=false" (click)="saveChanges(i)">Save</button>
+      &nbsp;
+      <button (click)="row.isEditable=false" (click)="cancelChanges(i)">Cancel</button>
+    </td>
+  </tr>
+</tbody>
+
+</table>
+
+</div>
+
+
