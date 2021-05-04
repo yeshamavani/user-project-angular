@@ -19,6 +19,7 @@ export class AppComponent{
   loadData() {
     this.service.getUserData().subscribe((res)=>{
     this.store.seedData(res);
+    console.log("Git trial");
     this.data = this.store.getRecords();
     this.buttonText = 'Reload Data';
     });
