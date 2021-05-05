@@ -3,15 +3,15 @@ import { Role } from '../model/role.model';
 
 export interface IUserModel {
 
-    id: number;
+    uid: number;
     firstName: string;
     email: string;
     role: Role;
-    middleName?: string;
+    middleName?: string; 
     lastName?: string;
     phone?: string;
-    createdOn?: string;
-    modifiedOn?: string;
+    createdOn?: Date;
+    modifiedOn?: Date;
     address: string;
     isEditable?: boolean
    

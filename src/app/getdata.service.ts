@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GetdataService {
 
-    data: IUserModel[];
+  data: IUserModel[];
   // = [
   //   {"firstName":"Charlie","lastName":"Winwright","email":"ewinwright0@comcast.net","phone":"9692317258","role":Role.Admin,"createdOn":"19/12/2019","modifiedOn":"06/09/2020","address":"Mumbai"},
   //   {"firstName":"Jaclyn","middleName":"John","lastName":"Leneham","email":"eleneham1@deviantart.com","phone":"7551267312","role":Role.Subscriber,"createdOn":"18/12/2019","modifiedOn":"04/01/2021","address":"Mumbai"},
@@ -22,42 +22,50 @@ export class GetdataService {
   //   {"firstName":"Granthem","middleName":"Tom","lastName":"Throssell","email":"ethrossell8@icio.us","phone":"4682418815","role":Role.Subscriber,"createdOn":"24/05/2018","modifiedOn":"22/08/2020","address":"Mumbai"},
   //   {"firstName":"Rey","middleName":"Ross","lastName":"Emmison","email":"eemmison9@nationalgeographic.com","phone":"1698160584","role":Role.SuperAdmin,"createdOn":"04/08/2019","modifiedOn":"10/03/2021","address":"Mumbai"}
   // ];  
-  
+
   constructor(private http: HttpClient) { }
 
   getMockData() {
 
     let data2: IUserModel[] = this.data.map((row) => {
-      return {...row};
+      return { ...row };
     });
     return data2;
   }
 
   getUserData(): Observable<any> {
 
-    const headers = { 'content-type': 'application/json', 'referer' : 'localhost'} ;
+    const headers = { 'content-type': 'application/json', 'referer': 'localhost' };
     let url: string = 'http://localhost:3000/users';
-    return this.http.get(url, {'headers': headers});
+    return this.http.get(url, { 'headers': headers });
 
   }
 
   createUser(record: IUserModel) {
 
-    const headers = { 'content-type': 'application/json', 'referer' : 'localhost'} ;
-    let url: string = 'http://localhost:3000/addUsers';
-    console.log(record);
+    const headers = { 'content-type': 'application/json', 'referer': 'localhost' };
+    let url: string = 'http://localhost:3000/users';
     delete record.isEditable;
+    delete record.uid;
     let body = record;
-    console.log(body);
-    return this.http.post(url, body, {'headers':headers});
+    return this.http.post(url, body, { 'headers': headers });
   }
 
   deleteUser(x: number) {
     //let id: string = x.toString();
-    const headers = { 'content-type': 'application/json', 'referer' : 'localhost'} ;
+    const headers = { 'content-type': 'application/json', 'referer': 'localhost' };
     let url: string = 'http://localhost:3000/users' + '/' + x.toString();
-    return this.http.delete(url, {'headers':headers});
+    return this.http.delete(url, { 'headers': headers });
 
+  }
+
+  updateUser(record: IUserModel) {
+    const headers = { 'content-type': 'application/json', 'referer': 'localhost' };
+    let url: string = 'http://localhost:3000/users' + '/' + record.uid.toString();
+    delete record.isEditable;
+    delete record.uid;
+    let body = record;
+    return this.http.patch(url, body, { 'headers': headers });
   }
 
 }

@@ -9,19 +9,18 @@ import { Role } from './model/role.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent {
   title = 'my-proj';
   buttonText = 'Load Data';
   data: IUserModel[];
   tempData;
-  constructor(private service: GetdataService, private store: UserStore<IUserModel>) {  }
+  constructor(private service: GetdataService, private store: UserStore<IUserModel>) { }
 
   loadData() {
-    this.service.getUserData().subscribe((res)=>{
-    this.store.seedData(res);
-    console.log("Git trial");
-    this.data = this.store.getRecords();
-    this.buttonText = 'Reload Data';
+    this.service.getUserData().subscribe((res) => {
+      this.store.seedData(res);
+      this.data = this.store.getRecords();
+      this.buttonText = 'Reload Data';
     });
 
   }
@@ -43,7 +42,7 @@ export class AppComponent{
       })
     }
   }
-  
+
   cancelChanges(x) {
     const dataFromService: IUserModel[] = this.service.getMockData();
     // this.data[x] = dataFromService[x];
@@ -53,30 +52,49 @@ export class AppComponent{
 
   saveChanges(x) {
 
-    //this.data = this.store.cancelOrSaveChanges(this.data[x], x);
+    let userId = this.data[x].uid;
 
-    this.service.createUser(this.data[x]).subscribe((res) => {
-      this.store.createRecord(this.data[x]);
-      this.data = this.store.getRecords();
-    });
+    if (x == (this.data.length - 1)) {
+        this.service.createUser(this.data[x]).subscribe((res) => {
+        console.log(res);  
+       const receivedData: IUserModel =  res as IUserModel;
+        this.data[x].uid = receivedData.uid;        },
+        (err) => {
+          console.log("Error while adding new row");
+          throw new Error(err);
+        });
+
+    } else {
+        this.service.updateUser(this.data[x]).subscribe((res) => {
+        this.data[x].uid = userId;
+        this.data = this.store.updateData(this.data[x], x);
+        //= this.store.getRecords();
+      },
+        (err) => {
+          console.log("Error while updating the row");
+          throw new Error(err);
+        });
+
+    }
+
   }
 
   addRow() {
 
     // initialise an empty row 
-    // run the ngFor loop later save or cancel the changes
+    // edit and chnage the default data, later save or cancel the changes
 
     const emptyRecord: IUserModel = {
-    id: 0,
-    firstName: '',
-    email: '',
-    role:Role.Blank,
-    middleName: '',
-    lastName: '',
-    phone: '',
-    createdOn: '',
-    modifiedOn: '',
-    address: ''
+      uid: 0,
+      firstName: '',
+      email: '',
+      role: Role.Blank,
+      middleName: '',
+      lastName: '',
+      phone: '',
+      createdOn: new Date(),
+      modifiedOn: new Date(),
+      address: ''
     };
 
     this.data = this.store.createRecord(emptyRecord);
